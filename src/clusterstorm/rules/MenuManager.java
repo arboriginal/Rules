@@ -59,11 +59,11 @@ public class MenuManager {
 		}
 		
 		ItemStack a = deserialize(config, "accept");
-		accept = config.getInt("accept.slot", 21);
+		accept = config.getInt("accept.slot", config.getInt("accept.slot"));
 		c.setItem(accept, a);
 		
 		a = deserialize(config, "deny");
-		deny = config.getInt("accept.deny", 23);
+		deny = config.getInt("accept.deny", config.getInt("deny.slot"));
 		c.setItem(deny, a);
 	}
 	
