@@ -27,17 +27,19 @@ public class MenuManager {
 	}
 	
 	public void reload() {
-		if(i != null) i.clear();
-		if(c != null) c.clear();
+		FileConfiguration config = Rules.getInstance().getConfig();
+		String name = config.getString("inventory.name", "Rules").replace("&", "ยง");
+		kickMessage = config.getString("kickMessage", "Disconnected").replace("&", "ยง");
+		// Only recreate the inventory if not already set, prevent existing opened inventory to be empty after reload
+		if (i == null) 
+		  i = Bukkit.createInventory(null, config.getInt("inventory.simpleMenuRows") * 9, name);
+		else i.clear();
+    // Only recreate the inventory if not already set, prevent existing opened inventory to be empty after reload
+		if (c == null)
+		  c = Bukkit.createInventory(null, config.getInt("inventory.comfirmMenuRows") * 9, name);
+		else c.clear(); 
 		
-		FileConfiguration c = Rules.getInstance().getConfig();
-		String name = c.getString("inventory.name", "Rules").replace("&", "ง");
-		kickMessage = c.getString("kickMessage", "Disconnected").replace("&", "ง");
-		
-		this.i = Bukkit.createInventory(null, c.getInt("inventory.simpleMenuRows") * 9, name);
-		this.c = Bukkit.createInventory(null, c.getInt("inventory.comfirmMenuRows") * 9, name);
-		
-		ConfigurationSection sec = c.getConfigurationSection("items");
+		ConfigurationSection sec = config.getConfigurationSection("items");
 		if(sec != null)
 		{
 			Set<String> keys = sec.getKeys(false);
@@ -46,9 +48,9 @@ public class MenuManager {
 				int lastSlot = 0;
 				for (String key : keys)
 				{
-					ItemStack item = deserialize(c, "items." + key);
+					ItemStack item = deserialize(config, "items." + key);
 					if(item == null) continue;
-					int slot = c.getInt("items." + key + ".slot", lastSlot++);
+					int slot = config.getInt("items." + key + ".slot", lastSlot++);
 					this.i.setItem(slot, item);
 					this.c.setItem(slot, item);
 					
@@ -56,13 +58,13 @@ public class MenuManager {
 			}
 		}
 		
-		ItemStack a = deserialize(c, "accept");
-		accept = c.getInt("accept.slot", 21);
-		this.c.setItem(accept, a);
+		ItemStack a = deserialize(config, "accept");
+		accept = config.getInt("accept.slot", 21);
+		c.setItem(accept, a);
 		
-		a = deserialize(c, "deny");
-		deny = c.getInt("accept.deny", 23);
-		this.c.setItem(deny, a);
+		a = deserialize(config, "deny");
+		deny = config.getInt("accept.deny", 23);
+		c.setItem(deny, a);
 	}
 	
 	
@@ -133,7 +135,7 @@ public class MenuManager {
 					try {
 						List<String> payload = Rules.pastebin().getList(pastebin);
 						for (String p : payload) {
-							lorez.add("ง7" + p.replace("&", "\u00a7"));
+							lorez.add("ยง7" + p.replace("&", "\u00a7"));
 						}
 						continue;
 					} catch (Exception e) {
@@ -142,7 +144,7 @@ public class MenuManager {
 					}
 				}
 				
-				lorez.add("ง7" + l.replace("&", "\u00a7"));
+				lorez.add("ยง7" + l.replace("&", "\u00a7"));
 			}
 			meta.setLore(lorez);
 		}

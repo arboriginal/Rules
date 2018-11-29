@@ -1,6 +1,38 @@
 name: Rules
-main: clusterstorm.rules.Rules
-version: 1.0
+description: Agree with rules before playing on server.
+version: 1.1
+
 author: ClusterStorm
+contributors: [ arboriginal ]
+website: https://www.spigotmc.org/resources/rules.56584/
+dev-url: https://github.com/KlasterStormInc/Rules
+
+main: clusterstorm.rules.Rules
+depend: [ ]
+softdepend: [ authme ]
+
 commands:
   rules:
+    description: Main command of Rules plugin
+    permission: rules.rules
+
+permissions:
+   rules.*:
+      description: Gives all plugin permissions
+      default: op
+      children:
+         rules.rules: true
+         rules.rules.others: true
+         rules.rules.options: true
+
+   rules.rules:
+      description: Open rules menu
+      default: true
+      
+   rules.rules.others:
+      description: Open rules menu for other player
+      default: op
+      
+   rules.rules.options:
+      description: Allows to use reload and clear options
+      default: op

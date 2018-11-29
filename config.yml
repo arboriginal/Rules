@@ -1,3 +1,14 @@
+messages:
+  player_cleared: "Players cleared!"
+  reload_start: "Starting reloading..."
+  reload_complete: "Configuration reloaded!"
+  reload_pastebin_start: "Starting loading from pastebin..."
+  reload_pastebin_complete: "Rules was loaded!"
+  insufficient_permissions: "§cInsufficient permissions!"
+  player_not_found: "§cPlayer {player} not found"
+  wrong_usage: "Open rules - /rules <player>"
+  prevent_while_sleeping: "§cYou cannot use this while sleeping."
+
 items:
   '1':
     id: BOOK
@@ -91,10 +102,3 @@ acceptSound: ENTITY_PLAYER_LEVELUP
 # Which commands player can use when he has not agree with rules
 # It makes no sense because he unable to close inventory, but still
 allowedCommands: []
-
-
-
-
-
-
-    
