@@ -1,5 +1,6 @@
 messages:
-  player_cleared: "Players cleared!"
+  player_cleared: "Player {player} cleared!"
+  players_cleared: "Players cleared!"
   reload_start: "Starting reloading..."
   reload_complete: "Configuration reloaded!"
   reload_pastebin_start: "Starting loading from pastebin..."
@@ -7,7 +8,13 @@ messages:
   insufficient_permissions: "§cInsufficient permissions!"
   player_not_found: "§cPlayer {player} not found"
   wrong_usage: "Open rules - /rules <player>"
+  wrong_usage_accept: "§cWrong usage: /rules -accept <player>"
+  wrong_usage_status: "§cWrong usage: /rules -status <player>"
   prevent_while_sleeping: "§cYou cannot use this while sleeping."
+  player_accept_added: "§aPlayer {player} has been added to people having accepted the rules!"
+  player_accept_already: "§cPlayer {player} has already accepted the rules!"
+  player_status_accepted: "§6Player {player} has §a§laccepted§6 the rules."
+  player_status_not_yet: "§6Player {player} has §lnot yet§6 accepted the rules."
 
 items:
   '1':

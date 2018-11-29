@@ -41,12 +41,21 @@ public class Players {
 		c.set("players", players);
 		save();
 	}
-	
-	public void clear() {
-		players.clear();
-		c.set("players", null);
-		save();
-	}
+  
+  public void clear() {
+    players.clear();
+    c.set("players", null);
+    save();
+  }
+  
+  public boolean clear(String player) {
+    player = player.toLowerCase();
+    if(!players.contains(player)) return false;
+    players.remove(player);
+    c.set("players", players);
+    save();
+    return true;
+  }
 	
 	private void save() {
 		try {

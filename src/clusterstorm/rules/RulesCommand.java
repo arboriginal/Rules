@@ -17,17 +17,67 @@ public class RulesCommand implements CommandExecutor {
 	  
 		if(args.length > 0 && sender.hasPermission("rules.options")) 
 		{
-			if(args[0].equalsIgnoreCase("-rl")) {
-				sender.sendMessage(prefix + config.getString("messages.reload_start"));
-				Rules.getInstance().reload();
-				sender.sendMessage(prefix + config.getString("messages.reload_complete"));
-				return true;
-			}
+      if(args[0].equalsIgnoreCase("-rl")) {
+        sender.sendMessage(prefix + config.getString("messages.reload_start"));
+        Rules.getInstance().reload();
+        sender.sendMessage(prefix + config.getString("messages.reload_complete"));
+        return true;
+      }
+
+      if(args[0].equalsIgnoreCase("-status")) {
+        if (args.length == 2) {
+          sender.sendMessage(prefix + config.getString("messages.player_status_" + (Rules.players().hasPlayer(args[1])? "accepted": "not_yet")).replace("{player}", args[1]));
+          return true;
+        }
+
+        sender.sendMessage(prefix + config.getString("messages.wrong_usage_status"));
+        return false;
+      }
+
+      if(args[0].equalsIgnoreCase("-accept")) {
+        if (args.length == 2) {
+          if (Rules.players().hasPlayer(args[1])) {
+            sender.sendMessage(prefix + config.getString("messages.player_accept_already").replace("{player}", args[1]));
+            return false;
+          }
+          
+          Rules.players().writePlayer(args[1]);
+          sender.sendMessage(prefix + config.getString("messages.player_accept_added").replace("{player}", args[1]));
+          return true;
+        }
+
+        sender.sendMessage(prefix + config.getString("messages.wrong_usage_accept"));
+        return false;
+      }
 			
 			if(args[0].equalsIgnoreCase("-clear")) {
-				Rules.players().clear();
-				sender.sendMessage(prefix + config.getString("messages.player_cleared"));
-				return true;
+			  if (args.length == 2) {
+          if (Rules.players().hasPlayer(args[1])) {
+            Rules.players().clear(args[1]);
+            sender.sendMessage(prefix + config.getString("messages.player_cleared").replace("{player}", args[1]));
+            
+            Player p = Bukkit.getPlayerExact(args[1]);
+            if (p != null && p.isOnline()) {
+              Rules.menu().openConfirm(p);
+            }
+            
+            return true;
+          };
+
+          sender.sendMessage(prefix + config.getString("messages.player_status_not_yet").replace("{player}", args[1]));
+          return false;
+			  }
+			  else {
+          Rules.players().clear();
+          sender.sendMessage(prefix + config.getString("messages.players_cleared"));
+          
+          for (Player p:Bukkit.getOnlinePlayers()) {
+            if (!Rules.players().hasPlayer(p.getName())) {
+              Rules.menu().openConfirm(p);
+            }
+          }
+          return true;
+			  }
 			}
 			
 			if(args[0].equalsIgnoreCase("-reload")) {

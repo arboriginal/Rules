@@ -80,11 +80,14 @@ public class MenuManager {
 		String player = p.getName();
 		if(Rules.players().hasPlayer(player)) return;
 		
-		Rules.players().writePlayer(player);
-		if(Rules.sound != null) p.playSound(p.getLocation(), Rules.sound, 1, 1);
-		p.closeInventory();
+		RulesConfirmedEvent event = new RulesConfirmedEvent(p);
+		Bukkit.getPluginManager().callEvent(event);
 		
-		Bukkit.getPluginManager().callEvent(new RulesConfirmedEvent(p));
+		if (!event.isCancelled()) {
+	    Rules.players().writePlayer(player);
+	    if(Rules.sound != null) p.playSound(p.getLocation(), Rules.sound, 1, 1);
+	    p.closeInventory();
+		}
 	}
 
 	public void deny(Player p) {
