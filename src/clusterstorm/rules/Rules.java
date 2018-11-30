@@ -205,7 +205,7 @@ public class Rules extends JavaPlugin implements Listener {
 	
 	
 	private boolean shouldCancel(Player p) {
-		return !players.hasPlayer(p.getName());
+		return !p.hasPermission("rules.exempt") && !players.hasPlayer(p.getName());
 	}
 	
 	

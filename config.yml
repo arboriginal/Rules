@@ -67,8 +67,6 @@ items:
     - 'pastebin: pLgFRfeG'
     # Item will be enchanted
     ench: true
-    
-    
 
 inventory:
   name: '&0Rules'
@@ -88,11 +86,16 @@ deny:
   slot: 23
   id: REDSTONE_BLOCK
   name: '&cDisagree'
-  
 
 # When player joins the server, he must click 'Agree' in rules inventory
 # He will not be able to close menu and play on server until he accept the rules
 useConfirmation: true
+
+# When player refuses the server rules...
+kickPlayerWhenRefuse: true
+closeInventoryWhenRefuse: false
+# (Could be useful, for example, for plugins implementing the Rules' events
+#  to put the player in a jail, and give him the exempt permission)
 
 # If true, menu will be opened not on join but on login or register
 authmeHook: true

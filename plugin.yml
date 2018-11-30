@@ -24,6 +24,7 @@ permissions:
          rules.rules: true
          rules.rules.others: true
          rules.rules.options: true
+         rules.rules.exempt: true
 
    rules.rules:
       description: Open rules menu
@@ -35,4 +36,8 @@ permissions:
       
    rules.rules.options:
       description: Allows to use reload and clear options
+      default: op
+      
+   rules.rules.exempt:
+      description: Be exempted to accept the rules to play
       default: op

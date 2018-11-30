@@ -3,7 +3,6 @@ package clusterstorm.rules;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -19,8 +18,7 @@ public class MenuManager {
 	
 	Inventory i, c;
 	int accept, deny;
-	
-	String kickMessage;
+
 
 	public MenuManager() {
 		reload();
@@ -29,7 +27,6 @@ public class MenuManager {
 	public void reload() {
 		FileConfiguration config = Rules.getInstance().getConfig();
 		String name = config.getString("inventory.name", "Rules").replace("&", "§");
-		kickMessage = config.getString("kickMessage", "Disconnected").replace("&", "§");
 		// Only recreate the inventory if not already set, prevent existing opened inventory to be empty after reload
 		if (i == null) 
 		  i = Bukkit.createInventory(null, config.getInt("inventory.simpleMenuRows") * 9, name);
@@ -83,24 +80,34 @@ public class MenuManager {
 		RulesConfirmedEvent event = new RulesConfirmedEvent(p);
 		Bukkit.getPluginManager().callEvent(event);
 		
-		if (!event.isCancelled()) {
-	    Rules.players().writePlayer(player);
-	    if(Rules.sound != null) p.playSound(p.getLocation(), Rules.sound, 1, 1);
-	    p.closeInventory();
-		}
+		if (event.isCancelled()) return;
+		
+    Rules.players().writePlayer(player);
+    if(Rules.sound != null) p.playSound(p.getLocation(), Rules.sound, 1, 1);
+    p.closeInventory();
 	}
 
 	public void deny(Player p) {
 		String player = p.getName();
 		if(Rules.players().hasPlayer(player)) return;
+
+    RulesRefusedEvent event = new RulesRefusedEvent(p);
+    Bukkit.getPluginManager().callEvent(event);
+    
+    if (event.isCancelled()) return;
+
+    if (Rules.getInstance().getConfig().getBoolean("closeInventoryWhenRefuse")) {
+      p.closeInventory(); // Because a plugin using the API can have given the permission exempt (and place the user in a jail)
+    }
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(Rules.getInstance(), new Runnable() {
-			
-			@Override
-			public void run() {
-				p.kickPlayer(kickMessage);
-			}
-		});
+    if (Rules.getInstance().getConfig().getBoolean("kickPlayerWhenRefuse")) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(Rules.getInstance(), new Runnable() {
+        @Override
+        public void run() {
+          p.kickPlayer(Rules.getInstance().getConfig().getString("kickMessage", "Disconnected").replace("&", "§"));
+        }
+      });
+    }
 	}
 	
 	
