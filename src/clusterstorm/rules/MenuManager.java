@@ -83,7 +83,7 @@ public class MenuManager {
 		if (event.isCancelled()) return;
 		
     Rules.players().writePlayer(player);
-    if(Rules.sound != null) p.playSound(p.getLocation(), Rules.sound, 1, 1);
+    Rules.getInstance().playSound(p, "accept");
     p.closeInventory();
 	}
 
@@ -95,10 +95,6 @@ public class MenuManager {
     Bukkit.getPluginManager().callEvent(event);
     
     if (event.isCancelled()) return;
-
-    if (Rules.getInstance().getConfig().getBoolean("closeInventoryWhenRefuse")) {
-      p.closeInventory(); // Because a plugin using the API can have given the permission exempt (and place the user in a jail)
-    }
 		
     if (Rules.getInstance().getConfig().getBoolean("kickPlayerWhenRefuse")) {
       Bukkit.getScheduler().scheduleSyncDelayedTask(Rules.getInstance(), new Runnable() {
@@ -107,6 +103,14 @@ public class MenuManager {
           p.kickPlayer(Rules.getInstance().getConfig().getString("kickMessage", "Disconnected").replace("&", "§"));
         }
       });
+      
+      return;
+    }
+    
+    Rules.getInstance().playSound(p, "deny");
+
+    if (Rules.getInstance().getConfig().getBoolean("closeInventoryWhenRefuse")) {
+      p.closeInventory(); // Because a plugin using the API can have given the permission exempt (and place the user in a jail)
     }
 	}
 	

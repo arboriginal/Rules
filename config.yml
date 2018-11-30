@@ -7,6 +7,7 @@ messages:
   reload_pastebin_complete: "Rules was loaded!"
   insufficient_permissions: "§cInsufficient permissions!"
   player_not_found: "§cPlayer {player} not found"
+  invalid_sound_name: "Sound {sound} is invalid..."
   wrong_usage: "Open rules - /rules <player>"
   wrong_usage_accept: "§cWrong usage: /rules -accept <player>"
   wrong_usage_status: "§cWrong usage: /rules -status <player>"
@@ -108,6 +109,12 @@ kickMessage: '&cYou must agree with terms!'
 
 # For 1.8: LEVEL_UP
 acceptSound: ENTITY_PLAYER_LEVELUP
+acceptSoundVolume: 1.0
+acceptSoundPitch: 1.0
+
+denySound: ENTITY_BAT_DEATH
+denySoundVolume: 1.0
+denySoundPitch: 0.2
 
 # Which commands player can use when he has not agree with rules
 # It makes no sense because he unable to close inventory, but still

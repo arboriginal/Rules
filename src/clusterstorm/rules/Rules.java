@@ -2,8 +2,9 @@ package clusterstorm.rules;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.PluginCommand;
@@ -28,7 +29,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Rules extends JavaPlugin implements Listener {
 
 	private static Rules instance;
-	public static Sound sound;
 	private MenuManager menu;
 	private Pastebin pastebin;
 	private Players players;
@@ -36,6 +36,7 @@ public class Rules extends JavaPlugin implements Listener {
 	
 	private boolean useConfirmation;
 	private List<String> allowedCommands;
+  private Map<String,Sound> sounds = new HashMap<String, Sound>();
 	
 	@Override
 	public void onEnable() {
@@ -49,11 +50,10 @@ public class Rules extends JavaPlugin implements Listener {
 		
 		useConfirmation = getConfig().getBoolean("useConfirmation", true);
 		allowedCommands = getConfig().getStringList("allowedCommands");
-		try {
-			sound = Sound.valueOf(getConfig().getString("acceptSound"));
-		} catch (Exception e) {
-			sound = null;
-		}
+
+    registerSound("accept");
+    registerSound("deny");
+		
 		if(allowedCommands == null) allowedCommands = new ArrayList<>();
 		
 		pastebin = new Pastebin();
@@ -86,11 +86,8 @@ public class Rules extends JavaPlugin implements Listener {
 		useConfirmation = getConfig().getBoolean("useConfirmation", true);
 		allowedCommands = getConfig().getStringList("allowedCommands");
 		if(allowedCommands == null) allowedCommands = new ArrayList<>();
-		try {
-			sound = Sound.valueOf(getConfig().getString("acceptSound"));
-		} catch (Exception e) {
-			sound = null;
-		}
+    registerSound("accept");
+    registerSound("deny");
 		reloadConfig();
 		menu.reload();
 	}
@@ -199,6 +196,33 @@ public class Rules extends JavaPlugin implements Listener {
 	public static Players players() {
 		return instance.players;
 	}
+	
+	private void registerSound(String key) {
+	  key += "Sound";
+	  
+	  if (sounds.containsKey(key)) sounds.remove(key);
+    
+	  String soundName = getConfig().getString(key);
+	  
+	  if (soundName.isEmpty()) return;
+	  
+	  try { 
+	    sounds.put(key, Sound.valueOf(soundName));
+	  }
+	  catch (Exception e) {
+	    getLogger().warning(getConfig().getString("messages.invalid_sound_name").replace("{sound}", soundName));
+	  }
+	}
+
+  public void playSound(Player player, String key) {
+    key += "Sound";
+
+    if(!sounds.containsKey(key)) return;
+
+    player.playSound(player.getLocation(), sounds.get(key),
+        (float) getConfig().getDouble(key + "Volume"),
+        (float) getConfig().getDouble(key + "Pitch"));
+  }
 	
 	
 	
