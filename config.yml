@@ -81,12 +81,16 @@ accept:
   slot: 21
   id: EMERALD_BLOCK
   name: '&aAgree'
+  lore:
+  - '&eClick to accept'
 
 # Deny button
 deny:
   slot: 23
   id: REDSTONE_BLOCK
   name: '&cDisagree'
+  lore:
+  - '&eClick to refuse'
 
 # When player joins the server, he must click 'Agree' in rules inventory
 # He will not be able to close menu and play on server until he accept the rules
